@@ -1,0 +1,30 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: nearby-friends
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  data:
+    redis:
+      repositories:
+        enabled: false
+  cassandra:
+    contact-points: ${CASSANDRA_HOST:localhost}
+    port: ${CASSANDRA_PORT:9042}
+    local-datacenter: ${CASSANDRA_DATACENTER:datacenter1}
+    keyspace-name: ${CASSANDRA_KEYSPACE:nearby_friends}
+    schema-action: CREATE_IF_NOT_EXISTS
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5432}/${POSTGRES_DB:nearbyfreinds}
+    username: ${POSTGRES_USER:nearbyfreinds}
+    password: ${POSTGRES_PASSWORD:nearbyfreinds}
+
+app:
+  instance-id: ${INSTANCE_ID:ws-1}
+  redis-cache-host: ${REDIS_CACHE_HOST:localhost}
+  redis-cache-port: ${REDIS_CACHE_PORT:6379}
+  redis-pubsub-nodes: ${REDIS_PUBSUB_NODES:localhost:6380,localhost:6381}
+  search-radius: ${SEARCH_RADIUS:200}

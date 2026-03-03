@@ -1,0 +1,214 @@
+services:
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    networks:
+      - nearby-friends-net
+    depends_on:
+      nginx:
+        condition: service_healthy
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      - nearby-friends-net
+    healthcheck:
+      test: ["CMD-SHELL", "nginx -t"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+    depends_on:
+      ws-server-1:
+        condition: service_healthy
+      ws-server-2:
+        condition: service_healthy
+
+  ws-server-1:
+    build: ./backend
+    image: nearby-friends-ws
+    ports:
+      - "8081:8080"
+    environment:
+      INSTANCE_ID: ws-1
+      REDIS_CACHE_HOST: redis-cache
+      REDIS_CACHE_PORT: 6379
+      REDIS_PUBSUB_NODES: redis-pubsub-1:6380,redis-pubsub-2:6381,redis-pubsub-3:6382
+      POSTGRES_HOST: postgresql
+      POSTGRES_DB: nearbyfreinds
+      POSTGRES_USER: nearbyfreinds
+      POSTGRES_PASSWORD: nearbyfreinds
+      CASSANDRA_HOST: cassandra
+      JAVA_OPTS: -Xmx256m -XX:MaxMetaspaceSize=128m
+    networks:
+      - nearby-friends-net
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/actuator/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    depends_on:
+      redis-cache:
+        condition: service_healthy
+      redis-pubsub-1:
+        condition: service_healthy
+      redis-pubsub-2:
+        condition: service_healthy
+      redis-pubsub-3:
+        condition: service_healthy
+      postgresql:
+        condition: service_healthy
+      cassandra:
+        condition: service_healthy
+
+  ws-server-2:
+    build: ./backend
+    image: nearby-friends-ws
+    ports:
+      - "8082:8080"
+    environment:
+      INSTANCE_ID: ws-2
+      REDIS_CACHE_HOST: redis-cache
+      REDIS_CACHE_PORT: 6379
+      REDIS_PUBSUB_NODES: redis-pubsub-1:6380,redis-pubsub-2:6381,redis-pubsub-3:6382
+      POSTGRES_HOST: postgresql
+      POSTGRES_DB: nearbyfreinds
+      POSTGRES_USER: nearbyfreinds
+      POSTGRES_PASSWORD: nearbyfreinds
+      CASSANDRA_HOST: cassandra
+      JAVA_OPTS: -Xmx256m -XX:MaxMetaspaceSize=128m
+    networks:
+      - nearby-friends-net
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/actuator/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    depends_on:
+      redis-cache:
+        condition: service_healthy
+      redis-pubsub-1:
+        condition: service_healthy
+      redis-pubsub-2:
+        condition: service_healthy
+      redis-pubsub-3:
+        condition: service_healthy
+      postgresql:
+        condition: service_healthy
+      cassandra:
+        condition: service_healthy
+
+  redis-cache:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - nearby-friends-net
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  redis-pubsub-1:
+    image: redis:7-alpine
+    ports:
+      - "6380:6380"
+    command: redis-server --port 6380
+    networks:
+      - nearby-friends-net
+    healthcheck:
+      test: ["CMD", "redis-cli", "-p", "6380", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  redis-pubsub-2:
+    image: redis:7-alpine
+    ports:
+      - "6381:6381"
+    command: redis-server --port 6381
+    networks:
+      - nearby-friends-net
+    healthcheck:
+      test: ["CMD", "redis-cli", "-p", "6381", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  redis-pubsub-3:
+    image: redis:7-alpine
+    ports:
+      - "6382:6382"
+    command: redis-server --port 6382
+    networks:
+      - nearby-friends-net
+    healthcheck:
+      test: ["CMD", "redis-cli", "-p", "6382", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  postgresql:
+    image: postgres:16-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: nearbyfreinds
+      POSTGRES_USER: nearbyfreinds
+      POSTGRES_PASSWORD: nearbyfreinds
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - nearby-friends-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nearbyfreinds"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  cassandra:
+    image: cassandra:4
+    ports:
+      - "9042:9042"
+    environment:
+      MAX_HEAP_SIZE: 512m
+      HEAP_NEWSIZE: 128m
+    volumes:
+      - cassandra-data:/var/lib/cassandra
+    networks:
+      - nearby-friends-net
+    healthcheck:
+      test: ["CMD-SHELL", "cqlsh -e 'describe cluster'"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+      start_period: 60s
+
+  cassandra-init:
+    image: cassandra:4
+    volumes:
+      - ./cassandra/init.cql:/scripts/init.cql
+      - ./cassandra/init.sh:/scripts/init.sh
+    entrypoint: ["/bin/bash", "/scripts/init.sh"]
+    networks:
+      - nearby-friends-net
+    depends_on:
+      cassandra:
+        condition: service_healthy
+
+networks:
+  nearby-friends-net:
+    driver: bridge
+
+volumes:
+  pgdata:
+  cassandra-data:

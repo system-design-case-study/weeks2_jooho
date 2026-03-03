@@ -1,0 +1,72 @@
+.hash-ring-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  background-color: #1a1a2e;
+}
+
+.hash-ring-svg {
+  width: 100%;
+  max-width: 360px;
+  height: auto;
+  display: block;
+}
+
+.hash-ring-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  padding: 4px 8px;
+  justify-content: center;
+}
+
+.hash-ring-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.hash-ring-legend-dot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.hash-ring-legend-label {
+  font-size: 11px;
+  color: #a0aec0;
+  white-space: nowrap;
+}
+
+.hash-ring-loading,
+.hash-ring-error,
+.hash-ring-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 24px 16px;
+  font-size: 12px;
+  color: #4a5568;
+  background-color: #1a1a2e;
+  flex-direction: column;
+}
+
+.hash-ring-retry-btn {
+  padding: 4px 12px;
+  font-size: 11px;
+  color: #64ffda;
+  background: transparent;
+  border: 1px solid #64ffda;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.hash-ring-retry-btn:hover {
+  background: rgba(100, 255, 218, 0.1);
+}

@@ -1,0 +1,235 @@
+.infra-panel {
+  display: flex;
+  flex-direction: column;
+  background-color: #1a1a2e;
+}
+
+.infra-panel-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #64ffda;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid #2a2a4a;
+}
+
+.infra-panel-loading-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #f6ad55;
+  animation: infra-blink 1s infinite;
+}
+
+@keyframes infra-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.2; }
+}
+
+.infra-panel-error {
+  padding: 8px 16px;
+  font-size: 11px;
+  color: #fc8181;
+  background-color: rgba(252, 129, 129, 0.05);
+  border-bottom: 1px solid #2a2a4a;
+}
+
+.infra-panel-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background-color: #2a2a4a;
+}
+
+.infra-section {
+  padding: 12px 16px;
+  background-color: #1a1a2e;
+}
+
+.infra-section-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: #8892b0;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.infra-section-count {
+  font-size: 10px;
+  color: #4a5568;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.infra-empty {
+  font-size: 12px;
+  color: #4a5568;
+  padding: 4px 0;
+}
+
+/* 서버 카드 그리드 */
+.infra-server-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.infra-server-card {
+  border: 1px solid #2a2a4a;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.infra-server-card-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  background-color: #16213e;
+}
+
+.infra-color-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.infra-server-name {
+  flex: 1;
+  font-size: 12px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.infra-badge {
+  font-size: 10px;
+  color: #718096;
+  background-color: #2a2a4a;
+  padding: 1px 6px;
+  border-radius: 10px;
+  white-space: nowrap;
+}
+
+/* 사용자/채널 목록 */
+.infra-user-empty {
+  padding: 4px 10px;
+  font-size: 11px;
+  color: #4a5568;
+}
+
+.infra-user-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.infra-user-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 3px 10px;
+  border-top: 1px solid #2a2a4a;
+}
+
+.infra-user-id {
+  font-size: 11px;
+  color: #ccd6f6;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.infra-user-pos {
+  font-size: 10px;
+  color: #4a5568;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.infra-channel-name {
+  font-size: 11px;
+  color: #9f7aea;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 캐시 테이블 */
+.infra-cache-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+}
+
+.infra-cache-table th {
+  text-align: left;
+  padding: 4px 6px;
+  color: #4a5568;
+  font-weight: 600;
+  border-bottom: 1px solid #2a2a4a;
+  font-size: 10px;
+  text-transform: uppercase;
+}
+
+.infra-cache-table td {
+  padding: 3px 6px;
+  color: #a0aec0;
+  border-bottom: 1px solid #16213e;
+}
+
+.infra-cache-userid {
+  color: #ccd6f6 !important;
+}
+
+.infra-ttl-ok {
+  color: #48bb78 !important;
+}
+
+.infra-ttl-warn {
+  color: #fc8181 !important;
+}
+
+/* 노드 제거/추가 버튼 */
+.infra-node-btn {
+  display: block;
+  width: 100%;
+  padding: 5px 0;
+  font-size: 11px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.infra-node-btn-remove {
+  background-color: rgba(229, 62, 62, 0.15);
+  color: #fc8181;
+}
+
+.infra-node-btn-remove:hover {
+  background-color: rgba(229, 62, 62, 0.3);
+}
+
+.infra-node-btn-add {
+  background-color: rgba(72, 187, 120, 0.15);
+  color: #68d391;
+}
+
+.infra-node-btn-add:hover {
+  background-color: rgba(72, 187, 120, 0.3);
+}

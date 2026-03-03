@@ -1,0 +1,30 @@
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Build outputs
+**/build/
+**/dist/
+**/target/
+
+# Gradle
+**/.gradle/
+
+# Node
+**/node_modules/
+
+# Docs
+docs/
+
+# OS
+.DS_Store
+**/.DS_Store
+
+# Logs
+*.log
+
+# Environment
+.env
+.env.local
+.env.*.local
